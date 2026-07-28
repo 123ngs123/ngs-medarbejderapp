@@ -1,4 +1,4 @@
-const CACHE_NAME = "ngs-arbejdsseddel-v4";
+const CACHE_NAME = "ngs-arbejdsseddel-v5";
 const FILES = [
   "./",
   "index.html",

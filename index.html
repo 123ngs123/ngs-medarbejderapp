@@ -158,17 +158,23 @@
     .button-text small { display: block; margin-top: 5px; font-size: .67rem; font-weight: 700; opacity: .76; }
     .arrow { font-size: 1.45rem; font-weight: 900; }
 
-    .team-photo {
+    .team-photo-frame {
       width: 100%;
-      aspect-ratio: 16 / 7;
+      aspect-ratio: 16 / 7.3;
       margin: 14px 0;
       border-radius: 12px;
-      object-fit: cover;
-      /* Hold hele gruppen i billedfeltet uden at trække portrætterne
-         fra rækken nedenunder op i den synlige beskæring. */
-      object-position: center 50%;
-      display: block;
+      overflow: hidden;
+      background: #ddd;
       box-shadow: 0 5px 16px rgba(0,0,0,.13);
+    }
+
+    .team-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 49%;
+      display: block;
+      transform: scale(1.04);
     }
 
     .check-card {
@@ -255,7 +261,9 @@
           <span class="arrow" aria-hidden="true">→</span>
         </a>
 
-        <img class="team-photo" src="team-collage.jpg" alt="Medarbejderne hos Næstved Gulvspecialist">
+        <div class="team-photo-frame">
+          <img class="team-photo" src="team-collage.jpg" alt="Medarbejderne hos Næstved Gulvspecialist">
+        </div>
 
         <section class="check-card">
           <h2 data-da="Det skal du registrere" data-pl="Co należy zarejestrować">Det skal du registrere</h2>
