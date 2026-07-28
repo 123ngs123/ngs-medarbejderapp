@@ -1,9 +1,9 @@
-const CACHE_NAME = "ngs-arbejdsseddel-v1";
+const CACHE_NAME = "ngs-arbejdsseddel-v2";
 const FILES = [
   "./",
   "index.html",
   "manifest.webmanifest",
-  "holdbillede.jpg",
+  "team-collage.jpg",
   "ngs-logo.png",
   "icon-192.png",
   "icon-512.png",
