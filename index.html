@@ -331,8 +331,8 @@
             <button class="employee" type="button" data-employee="Rami" aria-pressed="false">Rami</button>
           </div>
           <button class="notify-button" id="notifyButton" type="button"
-                  data-da="Slå daglige påmindelser til"
-                  data-pl="Włącz codzienne przypomnienia">Slå daglige påmindelser til</button>
+                  data-da="Klargør telefon til påmindelser"
+                  data-pl="Przygotuj telefon do przypomnień">Klargør telefon til påmindelser</button>
           <p class="notify-status" id="notifyStatus" aria-live="polite"></p>
         </section>
       </div>
@@ -368,8 +368,8 @@
       notifyButton.disabled = !employee || enabled;
       if (enabled) {
         notifyButton.textContent = language === "da"
-          ? `Påmindelser er slået til for ${employee}`
-          : `Przypomnienia są włączone dla ${employee}`;
+          ? `Telefonen er klar for ${employee}`
+          : `Telefon jest gotowy dla ${employee}`;
       } else {
         notifyButton.textContent = notifyButton.dataset[language];
       }
