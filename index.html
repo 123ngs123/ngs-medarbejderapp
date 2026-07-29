@@ -185,6 +185,48 @@
       box-shadow: 0 5px 16px rgba(0,0,0,.055);
     }
 
+    .setup-card {
+      margin-top: 14px;
+      padding: 20px;
+      border: 1px solid #e4e2dc;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 5px 16px rgba(0,0,0,.055);
+    }
+
+    .setup-card h2 { margin: 0; font-size: 1.03rem; }
+    .setup-card p { margin: 7px 0 14px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
+    .employee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .employee {
+      min-height: 44px;
+      border: 1px solid #d9d7d0;
+      border-radius: 10px;
+      color: var(--ink);
+      background: #f8f7f3;
+      font-size: .82rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .employee[aria-pressed="true"] {
+      border-color: #c59500;
+      background: var(--yellow);
+      box-shadow: inset 0 0 0 1px #c59500;
+    }
+    .notify-button {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 10px;
+      border: 0;
+      border-radius: 10px;
+      color: #fff;
+      background: #171713;
+      font-size: .8rem;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .notify-button:disabled { opacity: .55; cursor: default; }
+    .notify-status { min-height: 18px; margin: 9px 0 0 !important; font-weight: 700; }
+
     .check-card h2 { margin: 0 0 15px; font-size: 1.03rem; letter-spacing: -.015em; }
     .check-list { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
     .check-list li {
@@ -275,6 +317,24 @@
             <li><span class="check">✓</span><span data-da="Om opgaven er faktureringsklar" data-pl="Czy zadanie jest gotowe do fakturowania">Om opgaven er faktureringsklar</span></li>
           </ul>
         </section>
+
+        <section class="setup-card" aria-labelledby="setupTitle">
+          <h2 id="setupTitle" data-da="Påmindelser på denne telefon" data-pl="Przypomnienia na tym telefonie">Påmindelser på denne telefon</h2>
+          <p data-da="Vælg hvem telefonen tilhører. Valget gemmes kun på telefonen."
+             data-pl="Wybierz właściciela telefonu. Wybór zostanie zapisany tylko na tym telefonie.">
+            Vælg hvem telefonen tilhører. Valget gemmes kun på telefonen.
+          </p>
+          <div class="employee-grid" id="employeeGrid">
+            <button class="employee" type="button" data-employee="Jesper" aria-pressed="false">Jesper</button>
+            <button class="employee" type="button" data-employee="Mateusz" aria-pressed="false">Mateusz</button>
+            <button class="employee" type="button" data-employee="Grzesiek" aria-pressed="false">Grzesiek</button>
+            <button class="employee" type="button" data-employee="Rami" aria-pressed="false">Rami</button>
+          </div>
+          <button class="notify-button" id="notifyButton" type="button"
+                  data-da="Slå daglige påmindelser til"
+                  data-pl="Włącz codzienne przypomnienia">Slå daglige påmindelser til</button>
+          <p class="notify-status" id="notifyStatus" aria-live="polite"></p>
+        </section>
       </div>
     </main>
 
@@ -283,7 +343,11 @@
 
   <script>
     const languageButton = document.getElementById("languageButton");
+    const employeeButtons = [...document.querySelectorAll(".employee")];
+    const notifyButton = document.getElementById("notifyButton");
+    const notifyStatus = document.getElementById("notifyStatus");
     let language = localStorage.getItem("ngs-language") === "pl" ? "pl" : "da";
+    let employee = localStorage.getItem("ngs-employee") || "";
 
     function setLanguage(nextLanguage) {
       language = nextLanguage;
@@ -293,7 +357,61 @@
       });
       languageButton.textContent = language === "da" ? "Polski" : "Dansk";
       localStorage.setItem("ngs-language", language);
+      updateReminderUI();
     }
+
+    function updateReminderUI(message = "") {
+      employeeButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.employee === employee));
+      });
+      const enabled = localStorage.getItem("ngs-reminders") === "enabled";
+      notifyButton.disabled = !employee || enabled;
+      if (enabled) {
+        notifyButton.textContent = language === "da"
+          ? `Påmindelser er slået til for ${employee}`
+          : `Przypomnienia są włączone dla ${employee}`;
+      } else {
+        notifyButton.textContent = notifyButton.dataset[language];
+      }
+      notifyStatus.textContent = message;
+    }
+
+    employeeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        employee = button.dataset.employee;
+        localStorage.setItem("ngs-employee", employee);
+        localStorage.removeItem("ngs-reminders");
+        updateReminderUI();
+      });
+    });
+
+    notifyButton.addEventListener("click", async () => {
+      if (!employee) return;
+      if (!("Notification" in window) || !("serviceWorker" in navigator)) {
+        updateReminderUI(language === "da"
+          ? "Denne browser understøtter ikke app-notifikationer."
+          : "Ta przeglądarka nie obsługuje powiadomień aplikacji.");
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        updateReminderUI(language === "da"
+          ? "Notifikationer blev ikke tilladt på telefonen."
+          : "Powiadomienia nie zostały dozwolone na telefonie.");
+        return;
+      }
+      const registration = await navigator.serviceWorker.ready;
+      await registration.showNotification("NGS Arbejdsregistrering", {
+        body: language === "da"
+          ? `Tak ${employee}. Denne telefon er klar til NGS-påmindelser.`
+          : `Dziękujemy ${employee}. Ten telefon jest gotowy na przypomnienia NGS.`,
+        icon: "icon-192.png",
+        badge: "icon-192.png",
+        tag: "ngs-setup"
+      });
+      localStorage.setItem("ngs-reminders", "enabled");
+      updateReminderUI();
+    });
 
     languageButton.addEventListener("click", () => setLanguage(language === "da" ? "pl" : "da"));
     setLanguage(language);

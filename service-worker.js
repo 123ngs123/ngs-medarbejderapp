@@ -1,4 +1,4 @@
-const CACHE_NAME = "ngs-arbejdsseddel-v5";
+const CACHE_NAME = "ngs-arbejdsseddel-v6";
 const FILES = [
   "./",
   "index.html",
@@ -34,5 +34,30 @@ self.addEventListener("fetch", (event) => {
         return response;
       })
     )
+  );
+});
+
+self.addEventListener("push", (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (_) {}
+  event.waitUntil(
+    self.registration.showNotification(data.title || "NGS Arbejdsregistrering", {
+      body: data.body || "Husk at udfylde dagens arbejdsseddel.",
+      icon: "icon-192.png",
+      badge: "icon-192.png",
+      tag: data.tag || "ngs-daily-reminder",
+      data: { url: data.url || "./" }
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = event.notification.data?.url || "./";
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((windows) => {
+      const existing = windows.find((client) => "focus" in client);
+      return existing ? existing.focus().then(() => existing.navigate(target)) : clients.openWindow(target);
+    })
   );
 });
