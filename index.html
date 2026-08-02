@@ -33,6 +33,7 @@
     }
 
     button, a { font: inherit; }
+    [hidden] { display: none !important; }
     .shell { width: min(100%, 540px); min-height: 100svh; margin: 0 auto; background: var(--paper); }
 
     .topbar {
@@ -78,6 +79,41 @@
       letter-spacing: .16em;
       text-align: right;
       text-transform: uppercase;
+    }
+
+    .news-banner {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 11px;
+      align-items: start;
+      padding: 13px 18px 14px;
+      border-bottom: 1px solid #dfaa00;
+      background: #ffcf24;
+    }
+
+    .news-icon {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(255,255,255,.47);
+      font-size: 1.12rem;
+    }
+
+    .news-copy strong {
+      display: block;
+      margin-top: 1px;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .news-copy p {
+      margin: 4px 0 0;
+      font-size: .73rem;
+      font-weight: 680;
+      line-height: 1.38;
     }
 
     .hero {
@@ -126,20 +162,26 @@
 
     .content { padding: 14px 14px 30px; }
 
-    .open-form {
+    .open-form,
+    .guide-button,
+    .sms-button {
       display: grid;
       grid-template-columns: 48px 1fr 24px;
       gap: 12px;
       align-items: center;
-      min-height: 92px;
-      padding: 15px 16px;
-      border: 1px solid #e3aa00;
+      min-height: 82px;
+      padding: 14px 16px;
       border-radius: 14px;
       color: #171713;
-      background: var(--yellow);
-      box-shadow: 0 8px 20px rgba(95,72,0,.18);
       text-decoration: none;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .open-form {
+      min-height: 92px;
+      border: 1px solid #e3aa00;
+      background: var(--yellow);
+      box-shadow: 0 8px 20px rgba(95,72,0,.18);
     }
 
     .open-form:active { transform: translateY(1px); background: var(--yellow-dark); }
@@ -149,15 +191,66 @@
       height: 48px;
       place-items: center;
       border-radius: 10px;
-      background: rgba(255,255,255,.34);
+      background: rgba(255,255,255,.42);
       font-size: 1.4rem;
     }
 
     .button-text strong { display: block; font-size: 1.04rem; line-height: 1.1; }
-    .button-text small { display: block; margin-top: 5px; font-size: .67rem; font-weight: 700; opacity: .76; }
+    .button-text small { display: block; margin-top: 5px; font-size: .67rem; font-weight: 700; opacity: .76; line-height: 1.3; }
     .arrow { font-size: 1.45rem; font-weight: 900; }
 
-    .check-card {
+    .guide-button {
+      width: 100%;
+      margin-top: 14px;
+      border: 1px solid #d5d2c8;
+      background: #fff;
+      box-shadow: 0 5px 16px rgba(0,0,0,.055);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .guide-button[aria-expanded="true"] .arrow { transform: rotate(90deg); }
+
+    .guide-card {
+      margin-top: 8px;
+      padding: 18px 18px 8px;
+      border: 1px solid #d5d2c8;
+      border-radius: 14px;
+      background: #fffdf4;
+      box-shadow: 0 5px 16px rgba(0,0,0,.045);
+    }
+
+    .guide-card h2 { margin: 0 0 12px; font-size: 1rem; }
+    .guide-list { margin: 0; padding: 0; list-style: none; counter-reset: guide-step; }
+    .guide-list li {
+      position: relative;
+      min-height: 33px;
+      padding: 1px 0 12px 37px;
+      color: #50504a;
+      font-size: .76rem;
+      font-weight: 650;
+      line-height: 1.4;
+      counter-increment: guide-step;
+    }
+    .guide-list li::before {
+      content: counter(guide-step);
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: grid;
+      width: 25px;
+      height: 25px;
+      place-items: center;
+      border-radius: 50%;
+      color: #332900;
+      background: #ffcf24;
+      font-size: .7rem;
+      font-weight: 900;
+    }
+
+    .check-card,
+    .setup-card,
+    .support-card {
       margin-top: 14px;
       padding: 21px 20px;
       border: 1px solid #e4e2dc;
@@ -166,17 +259,11 @@
       box-shadow: 0 5px 16px rgba(0,0,0,.055);
     }
 
-    .setup-card {
-      margin-top: 14px;
-      padding: 20px;
-      border: 1px solid #e4e2dc;
-      border-radius: 14px;
-      background: #fff;
-      box-shadow: 0 5px 16px rgba(0,0,0,.055);
-    }
-
-    .setup-card h2 { margin: 0; font-size: 1.03rem; }
-    .setup-card p { margin: 7px 0 14px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
+    .setup-card { padding: 20px; }
+    .setup-card h2,
+    .support-card h2 { margin: 0; font-size: 1.03rem; }
+    .setup-card p,
+    .support-card p { margin: 7px 0 14px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
     .employee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .employee {
       min-height: 44px;
@@ -233,6 +320,16 @@
       font-weight: 950;
     }
 
+    .support-card { background: #171713; color: #fff; }
+    .support-card p { color: #d4d3cc; }
+    .sms-button {
+      min-height: 72px;
+      padding: 11px 13px;
+      border: 1px solid #e3aa00;
+      background: var(--yellow);
+    }
+    .sms-button:active { background: var(--yellow-dark); }
+
     footer {
       padding: 0 14px max(18px, env(safe-area-inset-bottom));
       color: #96968f;
@@ -263,6 +360,17 @@
     </header>
     <div class="eyebrow" data-da="Arbejdsregistrering" data-pl="Rejestracja pracy">Arbejdsregistrering</div>
 
+    <section class="news-banner" aria-labelledby="newsTitle">
+      <span class="news-icon" aria-hidden="true">🔔</span>
+      <div class="news-copy">
+        <strong id="newsTitle" data-da="Nyheder fra Per" data-pl="Aktualności od Pera">Nyheder fra Per</strong>
+        <p data-da="Appen er opdateret. Du kan nu åbne en vejledning og sende fejl eller mangler direkte til Per."
+           data-pl="Aplikacja została zaktualizowana. Możesz teraz otworzyć instrukcję i wysłać błędy lub braki bezpośrednio do Pera.">
+          Appen er opdateret. Du kan nu åbne en vejledning og sende fejl eller mangler direkte til Per.
+        </p>
+      </div>
+    </section>
+
     <main>
       <section class="hero">
         <div class="hero-copy">
@@ -283,6 +391,45 @@
           </span>
           <span class="arrow" aria-hidden="true">→</span>
         </a>
+
+        <button class="guide-button" id="guideButton" type="button" aria-expanded="false" aria-controls="guideCard">
+          <span class="button-icon" aria-hidden="true">❓</span>
+          <span class="button-text">
+            <strong data-da="Sådan udfylder du arbejdssedlen" data-pl="Jak wypełnić kartę pracy">Sådan udfylder du arbejdssedlen</strong>
+            <small data-da="Tryk her for en enkel trin-for-trin-forklaring" data-pl="Naciśnij, aby zobaczyć prostą instrukcję krok po kroku">Tryk her for en enkel trin-for-trin-forklaring</small>
+          </span>
+          <span class="arrow" aria-hidden="true">›</span>
+        </button>
+
+        <section class="guide-card" id="guideCard" hidden>
+          <h2 data-da="Udfyld arbejdssedlen sådan" data-pl="Wypełnij kartę pracy w ten sposób">Udfyld arbejdssedlen sådan</h2>
+          <ol class="guide-list">
+            <li data-da="Åbn arbejdssedlen og skriv kunde, adresse samt opstarts- og afslutningsdato. Er opgaven udført samme dag, vælges samme dato begge steder."
+                data-pl="Otwórz kartę pracy i wpisz klienta, adres oraz datę rozpoczęcia i zakończenia. Jeśli praca została wykonana jednego dnia, wpisz tę samą datę w obu miejscach.">
+              Åbn arbejdssedlen og skriv kunde, adresse samt opstarts- og afslutningsdato. Er opgaven udført samme dag, vælges samme dato begge steder.
+            </li>
+            <li data-da="Udfyld antal m², arbejdstimer og kørsel så præcist som muligt."
+                data-pl="Wpisz możliwie dokładnie liczbę m², godziny pracy i przejazd.">
+              Udfyld antal m², arbejdstimer og kørsel så præcist som muligt.
+            </li>
+            <li data-da="Vælg gulvtype og den behandling, der faktisk er udført på opgaven."
+                data-pl="Wybierz rodzaj podłogi i zabieg, który faktycznie wykonano.">
+              Vælg gulvtype og den behandling, der faktisk er udført på opgaven.
+            </li>
+            <li data-da="Registrér alle brugte materialer: slibebånd, slibeskiver, lak, olie, lud, sæbe, pensler, ruller, lakposer og øvrigt forbrug."
+                data-pl="Zarejestruj wszystkie zużyte materiały: pasy i krążki ścierne, lakier, olej, ług, mydło, pędzle, wałki, worki do lakieru i inne materiały.">
+              Registrér alle brugte materialer: slibebånd, slibeskiver, lak, olie, lud, sæbe, pensler, ruller, lakposer og øvrigt forbrug.
+            </li>
+            <li data-da="Skriv antal dørtrin og fejelister i stk. samt eventuelle problemer eller ekstra udgifter."
+                data-pl="Wpisz liczbę progów i listew w sztukach oraz ewentualne problemy lub dodatkowe koszty.">
+              Skriv antal dørtrin og fejelister i stk. samt eventuelle problemer eller ekstra udgifter.
+            </li>
+            <li data-da="Kontrollér oplysningerne, markér om opgaven er faktureringsklar, og send kun arbejdssedlen én gang."
+                data-pl="Sprawdź dane, zaznacz, czy zadanie jest gotowe do fakturowania, i wyślij kartę pracy tylko raz.">
+              Kontrollér oplysningerne, markér om opgaven er faktureringsklar, og send kun arbejdssedlen én gang.
+            </li>
+          </ol>
+        </section>
 
         <section class="check-card">
           <h2 data-da="Det skal du registrere" data-pl="Co należy zarejestrować">Det skal du registrere</h2>
@@ -305,12 +452,28 @@
             <button class="employee" type="button" data-employee="Jesper" aria-pressed="false">Jesper</button>
             <button class="employee" type="button" data-employee="Mateusz" aria-pressed="false">Mateusz</button>
             <button class="employee" type="button" data-employee="Grzesiek" aria-pressed="false">Grzesiek</button>
-            <button class="employee" type="button" data-employee="Rami" aria-pressed="false">Rami</button>
+            <button class="employee" type="button" data-employee="Per" aria-pressed="false">Per</button>
           </div>
           <button class="notify-button" id="notifyButton" type="button"
                   data-da="Klargør telefon til påmindelser"
                   data-pl="Przygotuj telefon do przypomnień">Klargør telefon til påmindelser</button>
           <p class="notify-status" id="notifyStatus" aria-live="polite"></p>
+        </section>
+
+        <section class="support-card" aria-labelledby="supportTitle">
+          <h2 id="supportTitle" data-da="Fejl eller mangler i appen?" data-pl="Błąd lub brak w aplikacji?">Fejl eller mangler i appen?</h2>
+          <p data-da="Send en SMS direkte til Per. Beskriv kort hvad der ikke virker, eller hvad der mangler."
+             data-pl="Wyślij SMS bezpośrednio do Pera. Krótko opisz, co nie działa lub czego brakuje.">
+            Send en SMS direkte til Per. Beskriv kort hvad der ikke virker, eller hvad der mangler.
+          </p>
+          <a class="sms-button" id="smsButton" href="sms:+4591891294">
+            <span class="button-icon" aria-hidden="true">💬</span>
+            <span class="button-text">
+              <strong data-da="Send SMS til Per" data-pl="Wyślij SMS do Pera">Send SMS til Per</strong>
+              <small>91 89 12 94</small>
+            </span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
         </section>
       </div>
     </main>
@@ -323,8 +486,17 @@
     const employeeButtons = [...document.querySelectorAll(".employee")];
     const notifyButton = document.getElementById("notifyButton");
     const notifyStatus = document.getElementById("notifyStatus");
+    const guideButton = document.getElementById("guideButton");
+    const guideCard = document.getElementById("guideCard");
+    const smsButton = document.getElementById("smsButton");
     let language = localStorage.getItem("ngs-language") === "pl" ? "pl" : "da";
     let employee = localStorage.getItem("ngs-employee") || "";
+
+    if (employee === "Rami") {
+      employee = "Per";
+      localStorage.setItem("ngs-employee", employee);
+      localStorage.removeItem("ngs-reminders");
+    }
 
     function setLanguage(nextLanguage) {
       language = nextLanguage;
@@ -333,6 +505,10 @@
         element.textContent = element.dataset[language];
       });
       languageButton.textContent = language === "da" ? "Polski" : "Dansk";
+      const smsBody = language === "da"
+        ? "Hej Per, jeg har fundet en fejl eller mangel i NGS-appen: "
+        : "Cześć Per, znalazłem błąd lub brak w aplikacji NGS: ";
+      smsButton.href = `sms:+4591891294?body=${encodeURIComponent(smsBody)}`;
       localStorage.setItem("ngs-language", language);
       updateReminderUI();
     }
@@ -360,6 +536,13 @@
         localStorage.removeItem("ngs-reminders");
         updateReminderUI();
       });
+    });
+
+    guideButton.addEventListener("click", () => {
+      const isOpen = guideButton.getAttribute("aria-expanded") === "true";
+      guideButton.setAttribute("aria-expanded", String(!isOpen));
+      guideCard.hidden = isOpen;
+      if (!isOpen) guideCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
 
     notifyButton.addEventListener("click", async () => {
